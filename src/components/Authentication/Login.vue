@@ -52,14 +52,21 @@
              user: {
                 email:null,
                 password:null,
-                
-             }
+            },
+            feedbackMsg : []
          };
      },
      methods: {
          submit()
          {
-             console.log(this.user)
+             this.feedbackMsg = []
+            this.$store.dispatch("auth/login", this.user).then(data => {
+               this.feedbackMsg = data.message
+               this.$router.push('/dashboard')
+            }).catch(error => {
+                this.feedbackMsg.push(error.response.data.message)
+               
+            })
          }
      },
      computed:{
@@ -67,6 +74,17 @@
             return this.user.email !== null &&
                     this.user.password !== null 
          },
+         loggedIn()
+         {
+             return this.$store.state.auth.status.loggedIn
+         }
+
+     },
+     created()
+     {
+         if(this.loggedIn){
+             return this.$router.push("/dashboard")
+         }
      }
   }
 </script>

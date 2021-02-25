@@ -83,15 +83,25 @@
                 telephone:null,
                 password:null,
                 password_confirmation:null
-             }
+             },
+             feedbackMsg:null
          };
      },
      methods: {
-         
          submit()
-         {
-             console.log(this.user)
-         }
+        {
+            this.feedbackMsg = null
+            this.$store.dispatch('auth/register', this.user).then(
+                data => {
+                    this.feedbackMsg = data.message
+                    this.$router.push('/user/login')
+                },
+                error => {
+                   this.feedbackMsg = error.response.data.message
+                   console.log(this.feedbackMsg)
+                }
+            ) 
+        }
      },
      computed:{
          valid(){
@@ -99,9 +109,19 @@
                     this.user.email !== null &&
                     this.user.telephone !== null && 
                     this.user.password !== null &&
-                    this.user.password_confirmation !== null
+                    this.user.password_confirmation !== null && this.user.password === this.user.password_confirmation
          },
-     }
+         loggedIn()
+         {
+             return this.$store.state.auth.state.loggedIn
+         }
+    },
+    mounted()
+    {
+        if(this.loggedIn){
+            return this.$router.push("/dashboard")
+        }
+    }
   }
 </script>
 

@@ -7,6 +7,8 @@ import Register from '@/components/Authentication/Register.vue'
 import Login from '@/components/Authentication/Login.vue'
 import Profile from '@/components/User/Profile.vue'
 import Dashboard from '@/components/User/Dashboard.vue'
+import AuthGuard from '@/router/auth-guard.js';
+import Product from '@/components/Product/index.vue'
 export default new VueRouter({
     mode:'history',
     base:__dirname,
@@ -19,7 +21,8 @@ export default new VueRouter({
         {
             path:"/dashboard",
             component:Dashboard,
-            name:"dashboard"
+            name:"dashboard",
+            beforeEnter:AuthGuard
         },
         {
             path:"/user/register",
@@ -34,7 +37,16 @@ export default new VueRouter({
         {
             path:"/user/profile",
             component:Profile,
-            name:"profile"
+            name:"profile",
+            beforeEnter:AuthGuard
+        }, 
+        {
+                path:"/products",
+                component:Product,
+                name:"product",
+                beforeEnter:AuthGuard
         }
     ]
 })
+
+ 
